@@ -31,8 +31,8 @@ before_script:
 
 # Run some tests
 script:
- - docker run Soren-365/todo-view-test npm test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
- - docker run Soren-365/todo-cache-service-test npm test
+ - docker run soren-365/todo-view-test npm test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
+ - docker run soren-365/todo-cache-service-test npm test
 
 after_success:
  # Build Production Images for deployment
