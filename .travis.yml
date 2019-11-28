@@ -6,13 +6,16 @@ services:
 # Install latest Docker CE so we can use Dockerfile outside build context
 addons:
  apt:
+  sources:
+     - google-chrome
    packages:
+     - google-chrome-stable
      - docker-ce
 
 # Install any dependencies, update Docker Compose to 1.23.2 so we can use Dockerfile outside build context
 before_install:
 - docker --version
-- docker-compose --version
+- docker-compose --version 
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
@@ -23,13 +26,13 @@ before_install:
 
 # Build development images for test
 before_script:
- - docker build ./todo-view -f ./todo-view/Dockerfile.dev -t gravitonian/todo-view-test
- - docker build ./todo-cache-service -f Dockerfile.nodejs.dev -t gravitonian/todo-cache-service-test
+ - docker build ./todo-view -f ./todo-view/Dockerfile.dev -t Soren-365/todo-view-test
+ - docker build ./todo-cache-service -f Dockerfile.nodejs.dev -t Soren-365/todo-cache-service-test
 
 # Run some tests
 script:
- - docker run gravitonian/todo-view-test npm test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
- - docker run gravitonian/todo-cache-service-test npm test
+ - docker run Soren-365/todo-view-test npm test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
+ - docker run Soren-365/todo-cache-service-test npm test
 
 after_success:
  # Build Production Images for deployment

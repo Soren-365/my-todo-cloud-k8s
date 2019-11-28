@@ -5,10 +5,10 @@ metadata:
  labels:
    type: local
 spec:
- storageClassName: manual
+ storageClassName: manual  #Edit for bare metal
  capacity:
    storage: 100Mi
  accessModes:
-   - ReadWriteOnce
+   - ReadWriteOnce   #Edit for bare metal
  hostPath:
-   path: "{path-to-your}/kubedata/todo/elastic"
+   path: "/home/soreng/kubedata/todo/elastic"
