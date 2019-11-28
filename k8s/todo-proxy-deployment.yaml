@@ -23,7 +23,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: todo-proxy
-        image: Soren-365/todo-proxy:1.0
+        image: soren365/todo-proxy:1.0
         ports:
         - containerPort: 80
         resources:
