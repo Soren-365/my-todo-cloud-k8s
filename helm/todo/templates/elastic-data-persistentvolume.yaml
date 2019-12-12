@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: elastic-data-pv
+ labels:
+   type: local
+spec:
+ storageClassName: manual  #Edit for bare metal
+ capacity:
+   storage: 100Mi
+ accessModes:
+   - ReadWriteOnce   #Edit for bare metal
+ hostPath:
+   path: "/home/{{ .Values.todoUser }}/kubedata/todo/elastic"

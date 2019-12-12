@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: todo
+  namespace: {{ template "todo.fullname" . }}-todo
   name: todo-postgres
   labels:
     todo-app-deployment: todo-postgres
@@ -20,7 +20,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: todo-postgres
-        image: soren365/todo-postgres:1.0
+        image: {{ .Values.todoImageUser }}/todo-postgres:{{ .Values.todoVersion }}
         envFrom:
         - configMapRef:
             name: todo-config
@@ -34,7 +34,7 @@ spec:
         - containerPort: 5432
         resources:
           limits:
-            memory: "1Gi"
+            memory: "100Mi"
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgres-data

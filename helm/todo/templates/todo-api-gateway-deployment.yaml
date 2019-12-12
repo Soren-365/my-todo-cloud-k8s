@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: todo
-  name: todo-search-ingestion
+  namespace: {{ template "todo.fullname" . }}-todo
+  name: todo-api-gateway
   labels:
-    todo-app-deployment: todo-search-ingestion
+    todo-app-deployment: todo-api-gateway
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas.todoApiGateway }}
   selector:
       matchLabels:
-        todo-app-pod: todo-search-ingestion
+        todo-app-pod: todo-api-gateway
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,22 +18,22 @@ spec:
   template:
     metadata:
       labels:
-        todo-app-pod: todo-search-ingestion
+        todo-app-pod: todo-api-gateway
     spec:
       restartPolicy: Always
       initContainers:
       - name: init-rabbitmq
         image: busybox
         command: ['sh', '-c', 'until nslookup todo-rabbitmq; do echo waiting for RabbitMQ; sleep 2; done;']
-      - name: init-elastic
-        image: busybox
-        command: ['sh', '-c', 'until nslookup todo-elastic; do echo waiting for ElasticSearch; sleep 2; done;']
       containers:
-      - name: todo-search-ingestion
-        image: soren365/todo-search-ingestion:1.0
+      - name: todo-api-gateway
+        image: {{ .Values.todoImageUser }}/todo-api-gateway:{{ .Values.todoVersion }}
         envFrom:
           - configMapRef:
               name: todo-config
+        ports:
+        - containerPort: 3000
         resources:
           limits:
             memory: "134217728"
+

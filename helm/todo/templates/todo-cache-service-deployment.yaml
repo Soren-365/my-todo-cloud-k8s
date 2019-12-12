@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: todo
-  name: todo-search-service
+  namespace: {{ template "todo.fullname" . }}-todo
+  name: todo-cache-service
   labels:
-    todo-app-deployment: todo-search-service
+    todo-app-deployment: todo-cache-service
 spec:
   replicas: 2
   selector:
       matchLabels:
-        todo-app-pod: todo-search-service
+        todo-app-pod: todo-cache-service
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,16 +18,12 @@ spec:
   template:
     metadata:
       labels:
-        todo-app-pod: todo-search-service
+        todo-app-pod: todo-cache-service
     spec:
       restartPolicy: Always
-      initContainers:
-      - name: init-elastic
-        image: busybox
-        command: ['sh', '-c', 'until nslookup todo-elastic; do echo waiting for ElasticSearch; sleep 2; done;']
       containers:
-      - name: todo-search-service
-        image: soren365/todo-search-service:1.0
+      - name: todo-cache-service
+        image: {{ .Values.todoImageUser }}/todo-cache-service:{{ .Values.todoVersion }}
         envFrom:
           - configMapRef:
               name: todo-config

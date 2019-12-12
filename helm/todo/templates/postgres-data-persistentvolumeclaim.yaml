@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: todo
-  name: elastic-data-pvc
+  namespace: {{ template "todo.fullname" . }}-todo
+  name: postgres-data-pvc
 spec:
-  storageClassName: manual # remove for dynamic provisioning
+  storageClassName: manual
   accessModes:
   - ReadWriteOnce
   resources:

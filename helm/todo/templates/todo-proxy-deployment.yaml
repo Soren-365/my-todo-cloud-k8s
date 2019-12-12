@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: todo
-  name: todo-cache-service
+  namespace: {{ template "todo.fullname" . }}-todo
+  name: todo-proxy
   labels:
-    todo-app-deployment: todo-cache-service
+    todo-app-deployment: todo-proxy
 spec:
   replicas: 2
   selector:
       matchLabels:
-        todo-app-pod: todo-cache-service
+        todo-app-pod: todo-proxy
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,17 +18,14 @@ spec:
   template:
     metadata:
       labels:
-        todo-app-pod: todo-cache-service
+        todo-app-pod: todo-proxy
     spec:
       restartPolicy: Always
       containers:
-      - name: todo-cache-service
-        image: soren365/todo-cache-service:1.0
-        envFrom:
-          - configMapRef:
-              name: todo-config
+      - name: todo-proxy
+        image: {{ .Values.todoImageUser }}/todo-proxy:{{ .Values.todoVersion }}
         ports:
-        - containerPort: 3000
+        - containerPort: 80
         resources:
           limits:
             memory: "134217728"

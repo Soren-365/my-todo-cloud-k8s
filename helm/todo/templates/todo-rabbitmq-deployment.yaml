@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: todo
+  namespace: {{ template "todo.fullname" . }}-todo
   name: todo-rabbitmq
   labels:
     todo-app-deployment: todo-rabbitmq
@@ -42,7 +42,7 @@ spec:
             containerPort: 5672
           resources:
             limits:
-              memory: "500Mi"
+              memory: "100Mi"
           livenessProbe:
             exec:
               command: ["rabbitmqctl", "status"]
